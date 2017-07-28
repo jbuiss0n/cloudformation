@@ -1,0 +1,158 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "A simple EC2 Instance",
+    "Parameters": {    
+        "Owner": {
+            "Type": "String",
+            "Default": "jbuiss0n"
+        },
+        "Project": {
+            "Type": "String",
+            "Default": "webapp"
+        },
+        "Environment": {
+            "Type": "String",
+            "Default": "test"
+        },
+        "NetwordStackName": {
+            "Description": "Name of an active CloudFormation stack that contains the networking resources, such as the vpc, subnet, security group, ... That will be used in this stack.",
+            "Type": "String",
+            "MinLength": 1,
+            "MaxLength": 255,
+            "AllowedPattern": "^[a-zA-Z][-a-zA-Z0-9]*$"
+        }
+    },
+    "Mappings" : {
+        "RegionMap" : {
+            "us-east-1": {
+                "AvailabilityZones": 6,
+                "AwsLinuxAmi" : "ami-a4c7edb2",
+                "Ec2KeyPair": ""
+            },
+            "us-east-2": {
+                "AvailabilityZones": 3,
+                "AwsLinuxAmi" : "ami-8a7859ef",
+                "Ec2KeyPair": ""
+            },
+            "us-west-1": { 
+                "AvailabilityZones": 2,
+                "AwsLinuxAmi" : "ami-327f5352",
+                "Ec2KeyPair": ""
+            },
+            "us-west-2": { 
+                "AvailabilityZones": 3,
+                "AwsLinuxAmi" : "ami-6df1e514",
+                "Ec2KeyPair": "XXXXX"
+            },
+            "eu-west-1": { 
+                "AvailabilityZones": 3,
+                "AwsLinuxAmi" : "ami-d7b9a2b1",
+                "Ec2KeyPair": "XXXXX" 
+            },
+            "eu-west-2": { 
+                "AvailabilityZones": 2,
+                "AwsLinuxAmi" : "ami-ed100689",
+                "Ec2KeyPair": "XXXXX" 
+            },
+            "ca-central-1": { 
+                "AvailabilityZones": 2,
+                "AwsLinuxAmi" : "ami-a7aa15c3",
+                "Ec2KeyPair": ""
+            },
+            "eu-central-1": { 
+                "AvailabilityZones": 3,
+                "AwsLinuxAmi" : "ami-82be18ed",
+                "Ec2KeyPair": "dev"
+            },
+            "ap-southeast-1": { 
+                "AvailabilityZones": 2,
+                "AwsLinuxAmi" : "ami-77af2014",
+                "Ec2KeyPair": ""
+            },
+            "ap-southeast-2": { 
+                "AvailabilityZones": 2,
+                "AwsLinuxAmi" : "ami-10918173",
+                "Ec2KeyPair": ""
+            },
+            "ap-northeast-1": { 
+                "AvailabilityZones": 2,
+                "AwsLinuxAmi" : "ami-3bd3c45c",
+                "Ec2KeyPair": ""
+            },
+            "ap-northeast-2": { 
+                "AvailabilityZones": 2,
+                "AwsLinuxAmi" : "ami-e21cc38c",
+                "Ec2KeyPair": ""
+            },
+            "ap-south-1": { 
+                "AvailabilityZones": 2,
+                "AwsLinuxAmi" : "ami-47205e28",
+                "Ec2KeyPair": ""
+            },
+            "sa-east-1": { 
+                "AvailabilityZones": 3,
+                "AwsLinuxAmi" : "ami-87dab1eb",
+                "Ec2KeyPair": ""
+            }
+        },
+        "Environments": {
+            "prod": {
+                "InstanceType": "t2.medium"
+            },
+            "test": {
+                "InstanceType": "t2.micro"
+            }
+        }
+    },
+    "Conditions" : {
+        "HasEc2KeyPair" : { "Fn::Not" : [{ "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "Ec2KeyPair"] }, ""] }] },
+        "HasSixthAvailibityZone": { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 6] },
+        "HasFifthAvailibityZone": { "Fn::Or": [
+            { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 5] },
+            { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 6] }
+        ] },
+        "HasFourthAvailibityZone": { "Fn::Or": [
+            { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 4] },
+            { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 5] },
+            { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 6] }
+        ] },
+        "HasThirdAvailibityZone": { "Fn::Or": [
+            { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 3] },
+            { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 4] },
+            { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 5] },
+            { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 6] }
+        ] }
+    },
+    "Resources": {
+       "StaticWebAppInstance" : {
+           "Type" : "AWS::EC2::Instance",
+           "Properties" : {
+               "ImageId" : { "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AwsLinuxAmi"] },
+               "KeyName" : { "Fn::If": ["HasEc2KeyPair", { "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "Ec2KeyPair"] }, { "Ref" : "AWS::NoValue" }] },
+               "InstanceType" : { "Fn::FindInMap" : ["Environments", { "Ref" : "Environment" }, "InstanceType"] },
+               "NetworkInterfaces": [
+                    {
+                        "DeviceIndex": "0",
+                        "AssociatePublicIpAddress": "true",
+                        "SubnetId": { "Fn::ImportValue": { "Fn::Sub": "${NetwordStackName}-PrivateSubnetA" } },
+                        "GroupSet": [{ "Fn::ImportValue": { "Fn::Sub": "${NetwordStackName}-DefaultSecurityGroup" } }]
+                    }
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["ec2", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": { "Ref": "AWS::StackName" }
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ]    
+           }
+       }
+    }
+}
