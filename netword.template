@@ -1,0 +1,854 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Description": "Standard netword for any stack",
+    "Parameters": {
+        "Owner": {
+            "Type": "String",
+            "Default": "jbuiss0n"
+        },
+        "Project": {
+            "Type": "String",
+            "Default": "netword"
+        },
+        "Environment": {
+            "Type": "String",
+            "Default": "test"
+        },
+        "DhcpDomainName": {
+            "Type": "String",
+            "Default": "jbuiss0n.internal",
+            "Description": "Internal DHCP domain name"
+        },
+        "CidrVpc": {
+            "Type": "String",
+            "Default": "10.1.0.0/16",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "Must be a valid CIDR range of the form x.x.x.x/x."
+        },
+        "CidrBlock1": {
+            "Type": "String",
+            "Default": "10.1.1.0/24",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "Must be a valid CIDR range of the form x.x.x.x/x."
+        },
+        "CidrBlock2": {
+            "Type": "String",
+            "Default": "10.1.2.0/24",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "Must be a valid CIDR range of the form x.x.x.x/x."    
+        },
+        "CidrBlock3": {
+            "Type": "String",
+            "Default": "10.1.3.0/24",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "Must be a valid CIDR range of the form x.x.x.x/x."
+        },
+        "CidrBlock4": {
+            "Type": "String",
+            "Default": "10.1.4.0/24",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "Must be a valid CIDR range of the form x.x.x.x/x."
+        },
+        "CidrBlock5": {
+            "Type": "String",
+            "Default": "10.1.5.0/24",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "Must be a valid CIDR range of the form x.x.x.x/x."
+        },
+        "CidrBlock6": {
+            "Type": "String",
+            "Default": "10.1.6.0/24",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "Must be a valid CIDR range of the form x.x.x.x/x."
+        },
+        "CidrBlock7": {
+            "Type": "String",
+            "Default": "10.1.7.0/24",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "Must be a valid CIDR range of the form x.x.x.x/x."
+        },
+        "CidrBlock8": {
+            "Type": "String",
+            "Default": "10.1.8.0/24",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "Must be a valid CIDR range of the form x.x.x.x/x."
+        },
+        "CidrBlock9": {
+            "Type": "String",
+            "Default": "10.1.9.0/24",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "Must be a valid CIDR range of the form x.x.x.x/x."
+        },
+        "CidrBlock10": {
+            "Type": "String",
+            "Default": "10.1.10.0/24",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "Must be a valid CIDR range of the form x.x.x.x/x."
+        },
+        "CidrBlock11": {
+            "Type": "String",
+            "Default": "10.1.11.0/24",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "Must be a valid CIDR range of the form x.x.x.x/x."
+        },
+        "CidrBlock12": {
+            "Type": "String",
+            "Default": "10.1.12.0/24",
+            "AllowedPattern": "(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})/(\\d{1,2})",
+            "ConstraintDescription": "Must be a valid CIDR range of the form x.x.x.x/x."
+        }
+    },
+    "Mappings": {
+        "RegionMap" : {
+            "us-east-1": {
+                "AvailabilityZones": 6
+            },
+            "us-east-2": {
+                "AvailabilityZones": 3
+            },
+            "us-west-1": {
+                "AvailabilityZones": 3
+            },
+            "us-west-2": {
+                "AvailabilityZones": 2
+            },
+            "eu-west-1": {
+                "AvailabilityZones": 3
+            },
+            "eu-west-2": {
+                "AvailabilityZones": 2
+            },
+            "ca-central-1": {
+                "AvailabilityZones": 2
+            },
+            "eu-central-1": {
+                "AvailabilityZones": 3
+            },
+            "ap-southeast-1": {
+                "AvailabilityZones": 2
+            },
+            "ap-southeast-2": {
+                "AvailabilityZones": 2
+            },
+            "ap-northeast-1": {
+                "AvailabilityZones": 2
+            },
+            "ap-northeast-2": {
+                "AvailabilityZones": 2
+            },
+            "ap-south-1": {
+                "AvailabilityZones": 2
+            },
+            "sa-east-1": { 
+                "AvailabilityZones": 3
+            }
+        }
+    },
+    "Conditions": {
+        "HasSixthAvailibityZone": { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 6] },
+        "HasFifthAvailibityZone": { "Fn::Or": [
+            { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 5] },
+            { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 6] }
+        ] },
+        "HasFourthAvailibityZone": { "Fn::Or": [
+            { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 4] },
+            { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 5] },
+            { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 6] }
+        ] },
+        "HasThirdAvailibityZone": { "Fn::Or": [
+            { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 3] },
+            { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 4] },
+            { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 5] },
+            { "Fn::Equals" : [{ "Fn::FindInMap" : ["RegionMap", { "Ref" : "AWS::Region" }, "AvailabilityZones"] }, 6] }
+        ] }
+    },
+    "Resources": {
+        "VPC": {
+            "Type": "AWS::EC2::VPC",
+            "Properties": {
+                "CidrBlock": { "Ref": "CidrVpc" },
+                "EnableDnsSupport": true,
+                "EnableDnsHostnames": true,
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["vpc", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": { "Ref": "AWS::StackName" }
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ]
+            }
+        },
+        "DHCPOptions": {
+            "Type": "AWS::EC2::DHCPOptions",
+            "Properties": {
+                "DomainName": { "Ref": "DhcpDomainName" },
+                "DomainNameServers": [
+                    "AmazonProvidedDNS"
+                ],
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["dhcp", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": { "Ref": "AWS::StackName" }
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ]
+            },
+            "DependsOn": ["VPC"]
+        },
+        "VPCDHCPOptionsAssociation": {
+            "Type": "AWS::EC2::VPCDHCPOptionsAssociation",
+            "Properties": {
+                "DhcpOptionsId": { "Ref": "DHCPOptions" },
+                "VpcId": { "Ref": "VPC" }
+            }
+        },
+        "InternetGateway": {
+            "Type": "AWS::EC2::InternetGateway",
+            "Properties": {
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["igw", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": { "Ref": "AWS::StackName" }
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ]
+            }
+        },
+        "VPCGatewayAttachment": {
+            "Type": "AWS::EC2::VPCGatewayAttachment",
+            "Properties": {
+                "InternetGatewayId": { "Ref": "InternetGateway" },
+                "VpcId": { "Ref": "VPC" }
+            }
+        },
+        "VPCHostedZone": {
+            "Type": "AWS::Route53::HostedZone",
+            "Properties": {
+                "Name": { "Ref": "DhcpDomainName" },
+                "HostedZoneConfig": {
+                    "Comment": { "Fn::Join": [" ", [{ "Ref": "Owner" }, { "Ref": "Environment" }, "hosted zone for", { "Ref": "Project" }]] }
+                },
+                "VPCs": [
+                    { "VPCId": { "Ref": "VPC" }, "VPCRegion": { "Ref": "AWS::Region"} }
+                ],
+                "HostedZoneTags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["dns", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                       "Value": { "Ref": "AWS::StackName" }
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ]
+            }
+        },
+        "SubnetPublicA": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": { "Fn::Select" : [0, { "Fn::GetAZs" : { "Ref" : "AWS::Region" } }] },
+                "VpcId": { "Ref": "VPC" },
+                "CidrBlock": { "Ref": "CidrBlock1" },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["sub-pub-a", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": { "Ref": "AWS::StackName" }
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ]
+            }
+        },
+        "SubnetPrivateA": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": { "Fn::Select" : [0, { "Fn::GetAZs" : { "Ref" : "AWS::Region" } }] },
+                "VpcId": { "Ref": "VPC" },
+                "CidrBlock": { "Ref": "CidrBlock2" },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["sub-priv-a", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": { "Ref": "AWS::StackName" }
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ]
+            }
+        },
+        "SubnetPublicB": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": { "Fn::Select" : [1, { "Fn::GetAZs" : { "Ref" : "AWS::Region" } }] },
+                "VpcId": { "Ref": "VPC" },
+                "CidrBlock": { "Ref": "CidrBlock3" },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["sub-pub-b", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": { "Ref": "AWS::StackName" }
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ]
+            }
+        },
+        "SubnetPrivateB": {
+            "Type": "AWS::EC2::Subnet",
+            "Properties": {
+                "AvailabilityZone": { "Fn::Select" : [1, { "Fn::GetAZs" : { "Ref" : "AWS::Region" } }] },
+                "VpcId": { "Ref": "VPC" },
+                "CidrBlock": { "Ref": "CidrBlock4" },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["sub-priv-b", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": { "Ref": "AWS::StackName" }
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ]
+            }
+        },
+        "SubnetPublicC": {
+            "Type": "AWS::EC2::Subnet",
+            "Condition" : "HasThirdAvailibityZone",
+            "Properties": {
+                "AvailabilityZone": { "Fn::Select" : [2, { "Fn::GetAZs" : { "Ref" : "AWS::Region" } }] },
+                "VpcId": { "Ref": "VPC" },
+                "CidrBlock": { "Ref": "CidrBlock5" },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["sub-pub-c", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": { "Ref": "AWS::StackName" }
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ]
+            }
+        },
+        "SubnetPrivateC": {
+            "Type": "AWS::EC2::Subnet",
+            "Condition" : "HasThirdAvailibityZone",
+            "Properties": {
+                "AvailabilityZone": { "Fn::Select" : [2, { "Fn::GetAZs" : { "Ref" : "AWS::Region" } }] },
+                "VpcId": { "Ref": "VPC" },
+                "CidrBlock": { "Ref": "CidrBlock6" },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["sub-priv-c", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": { "Ref": "AWS::StackName" }
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ]
+            }
+        },
+        "SubnetPublicD": {
+            "Type": "AWS::EC2::Subnet",
+            "Condition" : "HasFourthAvailibityZone",
+            "Properties": {
+                "AvailabilityZone": { "Fn::Select" : [3, { "Fn::GetAZs" : { "Ref" : "AWS::Region" } }] },
+                "VpcId": { "Ref": "VPC" },
+                "CidrBlock": { "Ref": "CidrBlock7" },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["sub-pub-d", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": { "Ref": "AWS::StackName" }
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ]
+            }
+        },
+        "SubnetPrivateD": {
+            "Type": "AWS::EC2::Subnet",
+            "Condition" : "HasFourthAvailibityZone",
+            "Properties": {
+                "AvailabilityZone": { "Fn::Select" : [3, { "Fn::GetAZs" : { "Ref" : "AWS::Region" } }] },
+                "VpcId": { "Ref": "VPC" },
+                "CidrBlock": { "Ref": "CidrBlock8" },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["sub-priv-d", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": { "Ref": "AWS::StackName" }
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ]
+            }
+        },
+        "SubnetPublicE": {
+            "Type": "AWS::EC2::Subnet",
+            "Condition" : "HasFifthAvailibityZone",
+            "Properties": {
+                "AvailabilityZone": { "Fn::Select" : [4, { "Fn::GetAZs" : { "Ref" : "AWS::Region" } }] },
+                "VpcId": { "Ref": "VPC" },
+                "CidrBlock": { "Ref": "CidrBlock9" },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["sub-pub-e", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": { "Ref": "AWS::StackName" }
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ]
+            }
+        },
+        "SubnetPrivateE": {
+            "Type": "AWS::EC2::Subnet",
+            "Condition" : "HasFifthAvailibityZone",
+            "Properties": {
+                "AvailabilityZone": { "Fn::Select" : [4, { "Fn::GetAZs" : { "Ref" : "AWS::Region" } }] },
+                "VpcId": { "Ref": "VPC" },
+                "CidrBlock": { "Ref": "CidrBlock10" },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["sub-priv-e", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": { "Ref": "AWS::StackName" }
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ]
+            }
+        },
+        "SubnetPublicF": {
+            "Type": "AWS::EC2::Subnet",
+            "Condition" : "HasSixthAvailibityZone",
+            "Properties": {
+                "AvailabilityZone": { "Fn::Select" : [5, { "Fn::GetAZs" : { "Ref" : "AWS::Region" } }] },
+                "VpcId": { "Ref": "VPC" },
+                "CidrBlock": { "Ref": "CidrBlock11" },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["sub-pub-f", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": { "Ref": "AWS::StackName" }
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ]
+            }
+        },
+        "SubnetPrivateF": {
+            "Type": "AWS::EC2::Subnet",
+            "Condition" : "HasSixthAvailibityZone",
+            "Properties": {
+                "AvailabilityZone": { "Fn::Select" : [5, { "Fn::GetAZs" : { "Ref" : "AWS::Region" } }] },
+                "VpcId": { "Ref": "VPC" },
+                "CidrBlock": { "Ref": "CidrBlock12" },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["sub-priv-f", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": { "Ref": "AWS::StackName" }
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ]
+            }
+        },
+        "RouteTablePublic": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": { "Ref": "VPC" },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["rt-pub", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": { "Ref": "AWS::StackName" }
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ]
+            }
+        },
+        "RouteTablePrivate": {
+            "Type": "AWS::EC2::RouteTable",
+            "Properties": {
+                "VpcId": { "Ref": "VPC" },
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["rt-priv", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": { "Ref": "AWS::StackName" }
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ]
+            }
+        },
+        "RoutePublic": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "RouteTableId": { "Ref": "RouteTablePublic" },
+                "GatewayId": { "Ref": "InternetGateway" }
+            }
+        },
+        "EipNatGateway": {
+            "Type": "AWS::EC2::EIP",
+            "Properties": {
+                "Domain": "vpc"
+            }
+        },
+        "NatGatewayPrivate": {
+            "DependsOn": "VPCGatewayAttachment",
+            "Type": "AWS::EC2::NatGateway",
+            "Properties": {
+                "AllocationId": { "Fn::GetAtt": ["EipNatGateway", "AllocationId"] },
+                "SubnetId": { "Ref": "SubnetPublicA" }
+            }
+        },
+        "RoutePrivate": {
+            "Type": "AWS::EC2::Route",
+            "Properties": {
+                "DestinationCidrBlock": "0.0.0.0/0",
+                "RouteTableId": { "Ref": "RouteTablePrivate" },
+                "NatGatewayId": { "Ref": "NatGatewayPrivate" }
+            }
+        },
+        "SubnetRouteTableAssociationPublicA": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": { "Ref": "RouteTablePublic" },
+                "SubnetId": { "Ref": "SubnetPublicA" }
+            }
+        },
+        "SubnetRouteTableAssociationPublicB": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": { "Ref": "RouteTablePublic" },
+                "SubnetId": { "Ref": "SubnetPublicB" }
+            }
+        },
+        "SubnetRouteTableAssociationPublicC": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Condition" : "HasThirdAvailibityZone",
+            "Properties": {
+                "RouteTableId": { "Ref": "RouteTablePublic" },
+                "SubnetId": { "Ref": "SubnetPublicC" }
+            }
+        },
+        "SubnetRouteTableAssociationPublicD": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Condition" : "HasFourthAvailibityZone",
+            "Properties": {
+                "RouteTableId": { "Ref": "RouteTablePublic" },
+                "SubnetId": { "Ref": "SubnetPublicD" }
+            }
+        },
+        "SubnetRouteTableAssociationPublicE": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Condition" : "HasFifthAvailibityZone",
+            "Properties": {
+                "RouteTableId": { "Ref": "RouteTablePublic" },
+                "SubnetId": { "Ref": "SubnetPublicE" }
+            }
+        },
+        "SubnetRouteTableAssociationPublicF": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Condition" : "HasSixthAvailibityZone",
+            "Properties": {
+                "RouteTableId": { "Ref": "RouteTablePublic" },
+                "SubnetId": { "Ref": "SubnetPublicF" }
+            }
+        },
+        "SubnetRouteTableAssociationPrivateA": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": { "Ref": "RouteTablePrivate" },
+                "SubnetId": { "Ref": "SubnetPrivateA" }
+            }
+        },
+        "SubnetRouteTableAssociationPrivateB": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Properties": {
+                "RouteTableId": { "Ref": "RouteTablePrivate" },
+                "SubnetId": { "Ref": "SubnetPrivateB" }
+            }
+        },
+        "SubnetRouteTableAssociationPrivateC": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Condition" : "HasThirdAvailibityZone",
+            "Properties": {
+                "RouteTableId": { "Ref": "RouteTablePrivate" },
+                "SubnetId": { "Ref": "SubnetPrivateC" }
+            }
+        },
+        "SubnetRouteTableAssociationPrivateD": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Condition" : "HasFourthAvailibityZone",
+            "Properties": {
+                "RouteTableId": { "Ref": "RouteTablePrivate" },
+                "SubnetId": { "Ref": "SubnetPrivateD" }
+            }
+        },
+        "SubnetRouteTableAssociationPrivateE": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Condition" : "HasFifthAvailibityZone",
+            "Properties": {
+                "RouteTableId": { "Ref": "RouteTablePrivate" },
+                "SubnetId": { "Ref": "SubnetPrivateE" }
+            }
+        },
+        "SubnetRouteTableAssociationPrivateF": {
+            "Type": "AWS::EC2::SubnetRouteTableAssociation",
+            "Condition" : "HasSixthAvailibityZone",
+            "Properties": {
+                "RouteTableId": { "Ref": "RouteTablePrivate" },
+                "SubnetId": { "Ref": "SubnetPrivateF" }
+            }
+        },
+        "SecurityGroupDefault": {
+            "Type": "AWS::EC2::SecurityGroup",
+            "Properties": {
+                "GroupName": { "Fn::Join": [".", ["sg.default", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] },
+                "VpcId": { "Ref": "VPC" },
+                "GroupDescription": "Default Security Group",
+                "Tags": [
+                    {
+                        "Key": "Name",
+                        "Value": { "Fn::Join": [".", ["sg-default", { "Ref": "Owner" }, { "Ref": "Project" }, { "Ref": "Environment" }]] }
+                    },
+                    {
+                        "Key": "Stack",
+                        "Value": { "Ref": "AWS::StackName" }
+                        
+                    },
+                    {
+                        "Key": "Environment",
+                        "Value": { "Ref": "Environment" }
+                    }
+                ],
+                "SecurityGroupEgress": [{
+                    "CidrIp": "0.0.0.0/0",
+                    "IpProtocol": "tcp",
+                    "FromPort": "0",
+                    "ToPort": "65535"
+                }]
+            }
+        },
+        "SecurityGroupDefaultItself": {
+            "Type": "AWS::EC2::SecurityGroupIngress",
+            "DependsOn": "SecurityGroupDefault",
+            "Properties": {
+                "FromPort": "0",
+                "ToPort": "65535",
+                "IpProtocol": "tcp",
+                "GroupId": { "Ref": "SecurityGroupDefault" },
+                "SourceSecurityGroupId": { "Ref": "SecurityGroupDefault" }
+            }
+        }
+    },
+    "Outputs": {
+        "VPC": {
+            "Description": "Stack VPC Id",
+            "Value": { "Ref": "VPC" },
+            "Export": {
+                "Name": { "Fn::Sub": "${AWS::StackName}-VPC" }
+            }
+        },
+        "PublicSubnetA": {
+            "Description": "Stack Public Subnet A",
+            "Value": { "Ref": "SubnetPublicA" },
+            "Export": {
+                "Name": { "Fn::Sub": "${AWS::StackName}-PublicSubnetA" }
+            }
+        },
+        "PublicSubnetB": {
+            "Description": "Stack Public Subnet B",
+            "Value": { "Ref": "SubnetPublicB" },
+            "Export": {
+                "Name": { "Fn::Sub": "${AWS::StackName}-PublicSubnetB" }
+            }
+        },
+        "PublicSubnetC": {
+            "Condition" : "HasThirdAvailibityZone",
+            "Description": "Stack Public Subnet C",
+            "Value": { "Ref": "SubnetPublicC" },
+            "Export": {
+                "Name": { "Fn::Sub": "${AWS::StackName}-PublicSubnetC" }
+            }
+        },
+        "PublicSubnetD": {
+            "Condition" : "HasFourthAvailibityZone",
+            "Description": "Stack Public Subnet D",
+            "Value": { "Ref": "SubnetPublicD" },
+            "Export": {
+                "Name": { "Fn::Sub": "${AWS::StackName}-PublicSubnetD" }
+            }
+        },
+        "PublicSubnetE": {
+            "Condition" : "HasFifthAvailibityZone",
+            "Description": "Stack Public Subnet E",
+            "Value": { "Ref": "SubnetPublicE" },
+            "Export": {
+                "Name": { "Fn::Sub": "${AWS::StackName}-PublicSubnetE" }
+            }
+        },
+        "PublicSubnetF": {
+            "Condition" : "HasSixthAvailibityZone",
+            "Description": "Stack Public Subnet F",
+            "Value": { "Ref": "SubnetPublicF" },
+            "Export": {
+                "Name": { "Fn::Sub": "${AWS::StackName}-PublicSubnetF" }
+            }
+        },
+        "PrivateSubnetA": {
+            "Description": "Stack Private Subnet A",
+            "Value": { "Ref": "SubnetPrivateA" },
+            "Export": {
+                "Name": { "Fn::Sub": "${AWS::StackName}-PrivateSubnetA" }
+            }
+        },
+        "PrivateSubnetB": {
+            "Description": "Stack Private Subnet B",
+            "Value": { "Ref": "SubnetPrivateB" },
+            "Export": {
+                "Name": { "Fn::Sub": "${AWS::StackName}-PrivateSubnetB" }
+            }
+        },
+        "PrivateSubnetC": {
+            "Condition" : "HasThirdAvailibityZone",
+            "Description": "Stack Private Subnet C",
+            "Value": { "Ref": "SubnetPrivateC" },
+            "Export": {
+                "Name": { "Fn::Sub": "${AWS::StackName}-PrivateSubnetC" }
+            }
+        },
+        "PrivateSubnetD": {
+            "Condition" : "HasFourthAvailibityZone",
+            "Description": "Stack Private Subnet D",
+            "Value": { "Ref": "SubnetPrivateD" },
+            "Export": {
+                "Name": { "Fn::Sub": "${AWS::StackName}-PrivateSubnetD" }
+            }
+        },
+        "PrivateSubnetE": {
+            "Condition" : "HasFifthAvailibityZone",
+            "Description": "Stack Private Subnet E",
+            "Value": { "Ref": "SubnetPrivateE" },
+            "Export": {
+                "Name": { "Fn::Sub": "${AWS::StackName}-PrivateSubnetE" }
+            }
+        },
+        "PrivateSubnetF": {
+            "Condition" : "HasSixthAvailibityZone",
+            "Description": "Stack Private Subnet F",
+            "Value": { "Ref": "SubnetPrivateF" },
+            "Export": {
+                "Name": { "Fn::Sub": "${AWS::StackName}-PrivateSubnetF" }
+            }
+        },
+        "DefaultSecutiryGroup": {
+            "Description": "Stack Default Security Group",
+            "Value": { "Ref": "SecurityGroupDefault" },
+            "Export": {
+                "Name": { "Fn::Sub": "${AWS::StackName}-DefaultSecutiryGroup" }
+            }
+        }
+    }
+}
